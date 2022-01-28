@@ -7,6 +7,7 @@ const galleryContainerRef = document.querySelector('ul.gallery');
 const markupGalleruRef = createMarkupGallery(galleryItems);
 
 galleryContainerRef.insertAdjacentHTML('beforeend', markupGalleruRef);
+galleryContainerRef.addEventListener('click', onCklickImg);
 
 function createMarkupGallery(elements) {
     return elements
@@ -16,4 +17,13 @@ function createMarkupGallery(elements) {
 </a>`;
         })
         .join('');
+}
+
+const lightbox = $('.gallery__item img').simpleLightbox();
+lightbox.next();
+function onCklickImg(evt) {
+    evt.preventDefault();
+    if (evt.target.nodeName !== 'IMG') {
+        return;
+    }
 }
