@@ -53,9 +53,9 @@ function onClick(evt) {
     modal.show(options.onShow());
 
     function closingModalWithButtonEsc(event) {
-        console.log(event.code);
         if (event.code === 'Escape') {
             modal.close(options.onClose());
         }
+        console.log(event.code);
     }
 }
