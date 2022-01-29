@@ -7,23 +7,24 @@ const galleryContainerRef = document.querySelector('ul.gallery');
 const markupGalleruRef = createMarkupGallery(galleryItems);
 
 galleryContainerRef.insertAdjacentHTML('beforeend', markupGalleruRef);
-galleryContainerRef.addEventListener('click', onCklickImg);
 
 function createMarkupGallery(elements) {
     return elements
         .map(({ preview, original, description }) => {
-            return `<a class="gallery__item" href="${original}">
-  <img class="gallery__image" src="${preview}" alt="${description}" />
-</a>`;
+            return `<li class="gallery__list">
+        <a class="gallery__item gallery__link" href="${original}">
+            <img
+                class="gallery__image"
+                src="${preview}"
+                alt="${description}"
+            />
+        </a>
+</li>`;
         })
         .join('');
 }
 
-const lightbox = $('.gallery__item img').simpleLightbox();
-lightbox.next();
-function onCklickImg(evt) {
-    evt.preventDefault();
-    if (evt.target.nodeName !== 'IMG') {
-        return;
-    }
-}
+const lightbox = new SimpleLightbox('.gallery__list a', {
+    captionDelay: 250,
+    captionsData: 'alt',
+});

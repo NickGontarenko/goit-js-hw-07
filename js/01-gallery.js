@@ -2,38 +2,13 @@ import { galleryItems } from './gallery-items.js';
 
 // Change code below this line
 
-// console.log(galleryItems);
+console.log(galleryItems);
 
 const galleryRef = document.querySelector('div.gallery');
 const galleryMarkupRef = createGalleruMarkup(galleryItems);
 
 galleryRef.insertAdjacentHTML('beforeend', galleryMarkupRef);
 galleryRef.addEventListener('click', onClick);
-
-function onClick(evt) {
-    evt.preventDefault();
-    if (evt.target.nodeName !== 'IMG') {
-        return;
-    }
-
-    const imgOriginalSize = evt.target.dataset.source;
-    const instance = basicLightbox.create(`
-    <img src="${imgOriginalSize}" width="800" height="600">
-`);
-
-    instance.show();
-
-    window.addEventListener('keydown', closingModalWithButtonEsc);
-
-    function closingModalWithButtonEsc(event) {
-        console.log(event.code);
-        if (event.code === 'Escape') {
-            instance.close();
-        }
-    }
-
-    // window.removeEventListener('keydown', closingModalWithButtonEsc);
-}
 
 function createGalleruMarkup(items) {
     return items
@@ -50,4 +25,37 @@ function createGalleruMarkup(items) {
 </div>`;
         })
         .join('');
+}
+
+function onClick(evt) {
+    evt.preventDefault();
+    if (evt.target.nodeName !== 'IMG') {
+        return;
+    }
+
+    const imgOriginalSize = evt.target.dataset.source;
+    const options = {
+        onShow: () => {
+            window.addEventListener('keydown', closingModalWithButtonEsc);
+        },
+        onClose: () => {
+            window.removeEventListener('keydown', closingModalWithButtonEsc);
+        },
+    };
+
+    const modal = basicLightbox.create(
+        `
+    <img src="${imgOriginalSize}" width="800" height="600">
+`,
+        options,
+    );
+
+    modal.show(options.onShow());
+
+    function closingModalWithButtonEsc(event) {
+        console.log(event.code);
+        if (event.code === 'Escape') {
+            modal.close(options.onClose());
+        }
+    }
 }
